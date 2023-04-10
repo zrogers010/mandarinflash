@@ -1,0 +1,10 @@
+<h1>Search Results</h1>
+{% for result in results %}
+    <div class="container border-bottom">
+        <a style="text-decoration: none; padding-top: 1px;" href="/character/{{ result.unicode|safe }}">
+            <p><code>{{ result.unicode|safe }} </code>  <strong>{{ result.pinyin1 }}</strong> - {{ result.partofspeech|upper }}. {{ result.english1 }}.</p>
+        </a>
+    </div>
+    {% empty %}
+    <div class="dropdown-header">No results</div>
+{% endfor %}

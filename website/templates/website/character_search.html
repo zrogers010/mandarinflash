@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flipcard.css" %}" />
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+{% endblock %}
+
+{% block 'content' %}
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <button onclick="predict()">Predict</button>
+    <p>Predicted Unicode: <span id="predicted"></span></p>
+
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stop);
+        
+        var drawing = false;
+        var x = 0;
+        var y = 0;
+        
+        function start(e) {
+            x = e.offsetX;
+            y = e.offsetY;
+            drawing = true;
+        }
+        
+        function draw(e) {
+            if (drawing == true) {
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 10;
+                ctx.stroke();
+                x = e.offsetX;
+                y = e.offsetY;
+            }
+        }
+        
+        function stop() {
+            drawing = false;
+        }
+        
+        function predict() {
+            // Get the image data from the canvas and send it to the Django view
+            var img_data = canvas.toDataURL('image/png');
+            $.ajax({
+                type: "POST",
+                url: "/predict_character/",
+                data: { img_data: img_data },
+                success: function(data) {
+                    // Update the HTML page with the predicted Unicode value
+                    $("#predicted").html(data);
+                }
+            });
+        }
+    </script>
+{% endblock %}

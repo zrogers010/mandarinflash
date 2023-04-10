@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flashcards.css" %}" />
+{% endblock %}
+
+{% block 'content' %}
+    <div class="page-header">
+        {% if level == 1 or level == 2 %}
+            <h2>Beginner Level {{ level }} Vocabulary Words</h2>
+        {% elif level == 3 or level == 4 %}
+            <h2>Intermediate Level {{ level }} Vocabulary Words</h2>
+        {% else %}
+            <h2>Advanced Level {{ level }} Vocabulary Words</h2>
+        {% endif %}
+        <p>
+            <a href="/words/1">Level 1 Vocab</a>, 
+            <a href="/words/2">Level 2 Vocab</a>, 
+            <a href="/words/3">Level 3 Vocab</a>, 
+            <a href="/words/4">Level 4 Vocab</a>
+            {% comment %} <a href="/words/5">Level 5 Vocab</a>, 
+            <a href="/words/6">Level 6 Vocab</a> {% endcomment %}
+        </p>
+        <a href="/quiz/{{level}}"><h5>Level {{ level }} Flashcard Quiz</h5></a>
+    </div>
+
+    <table class="table table-striped">
+        <tr class="fw-bold">
+            <td>#</td>
+            <td>Character</td>
+            <td>Pinyin</td>
+            <td>English Definition</td>
+            <td>Part Of Speech</td>
+        </tr>
+        {% for word in words %}
+        <tr>
+            <td>{{ word.word_freq_rank }} </td>
+            <td><a style="text-decoration: none" href="/character/{{ word.unicode|safe }}"><code><h5>{{ word.unicode|safe }}</h5></code></td>
+            <td>{{ word.pinyin1 }}</td>
+            <td>{{ word.english1 }}</td>
+            <td>{{ word.partofspeech }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

@@ -1,0 +1,146 @@
+
+#answer-buttons {
+  /* display: flex; */
+  width: 65%;
+  margin: auto;
+  padding: 10px;
+  justify-content: Left;
+  border: 1px solid black;
+}
+
+#answer-buttons ul {
+  /* list-style: none; */
+  padding: 5px;
+  margin: 5px;
+}
+
+#answer-buttons li {
+  /* display: inline; */
+  /* list-style: none; */
+  margin: 5px;
+}
+
+#answer-buttons label {
+  /* font-size: 10px; */
+  font-size: medium;
+  /* padding: 15px 30px; */
+}
+
+#score-display {
+  font-size: x-large;
+}
+
+.carousel-inner {
+  margin: 10px;
+  padding: 10px;
+}
+
+.carousel-item {
+  height: 650px;
+}
+
+.card {
+  text-align: center;
+  background-color: transparent !important;
+  width: 60%;
+  height: 380px !important;
+  margin: auto;
+  padding: 20px;
+  /* border: 1px solid #f2f2f2; */
+  /* border: 5px solid blue !important; */
+  border: 0px !important;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+.card a {
+  text-decoration: none;
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  border: 1px solid darkgray;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+.card-back .card-body {
+  margin-left: 15%;
+  margin-right: 15%;
+  padding: 10px;
+  top: 85%;
+  left: 50%;
+  text-align: left;
+  float: left;
+}
+
+
+.card-flipper {
+  display: hidden;;
+}
+
+.card-body label {
+  position: absolute;
+  margin: 0;
+  padding: 5px;
+  width: 80%;
+  top: 85%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: large;
+  font-weight: bold;
+}
+
+.card-flipper:checked + .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-flipper:checked ~ .card-front {
+  transform: rotateY(-180deg);
+}
+
+.card-flipper:checked ~ .card-back {
+  transform: rotateY(0);
+}
+
+.card-title {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.flip-back {
+  margin-top: 10px;
+}
+
+.page-header {
+  padding: 25px;
+  /* margin: 10px; */
+}
+
+.pinyin {
+  position: absolute;
+  margin: 0;
+  padding: 5px;
+  width: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, 25%);
+  transform: translate(-50%, 25%);
+  background-color: lightgrey;
+  border: 1px;
+  border-radius: 5px;
+  font-weight: bold;
+}

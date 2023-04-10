@@ -1,0 +1,70 @@
+<div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+    <h2><a class="navbar-brand fw-bolder" style="text-shadow: 2px 2px #343a40;" href="/">MandarinFlash</a></h2>
+    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+        <li>
+            <a href="/" class="nav-link align-middle px-0 fs-6 fw-bold text-muted">
+                <span class="ms-1 d-none d-sm-inline nav-item">Search</span>
+            </a>
+        </li>
+        <li>
+            <a href="/words/1" class="nav-link align-middle px-0 fs-6 fw-bold text-muted">
+                <span class="ms-1 d-none d-sm-inline nav-item">Beginner Words</span>
+            </a>
+            <ul class="nav flex-column ms-1" id="submenu" data-bs-parent="#menu">
+                <li class="nav-item ms-2">
+                    <a href="/quiz/1" class="nav-link px-0"> <span class="d-none d-sm-inline fw-bold text-muted">Level 1 Quiz</span></a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a href="/quiz/2" class="nav-link px-0"> <span class="d-none d-sm-inline fw-bold text-muted">Level 2 Quiz</span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/words/3" class="nav-link align-middle px-0 fs-6 fw-bold text-muted">
+                <span class="ms-1 d-none d-sm-inline nav-item">Intermediate Words</span>
+            </a>
+            <ul class="nav flex-column ms-1" id="submenu" data-bs-parent="#menu">
+                <li class="nav-item ms-2">
+                    <a href="/quiz/3" class="nav-link px-0"> <span class="d-none d-sm-inline fw-bold text-muted">Level 3 Quiz</span></a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a href="/quiz/4" class="nav-link px-0"> <span class="d-none d-sm-inline fw-bold text-muted">Level 4 Quiz</span></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/words/5" class="nav-link align-middle px-0 fs-6 fw-bold text-muted disabled">
+                <span class="ms-1 d-none d-sm-inline nav-item">Advanced Words <small>(coming soon!)</small></span>
+            </a>
+            <ul class="nav flex-column ms-1" id="submenu" data-bs-parent="#menu">
+                <li class="nav-item ms-2">
+                    <a href="/quiz/3" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline fw-bold text-muted">Level 5 Quiz</span></a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a href="/quiz/4" class="nav-link px-0 disabled"> <span class="d-none d-sm-inline fw-bold text-muted">Level 6 Quiz</span></a>
+                </li>
+            </ul>
+        </li>
+        
+    </ul>
+    <hr>
+    <div class="dropdown pb-4 fs-6 fw-bold user-menu">
+        {% if user.is_authenticated %}
+            <a href="#" class="d-flex align-items-center text-light text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                <span class="d-none d-sm-inline mx-1" style="text-shadow: 1x 1px #343a40;">Ni hao, {{user}}!</span>    
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="#">Study</a></li>
+                <li><a class="dropdown-item" href="#">My Flashcards</a></li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+            </ul>
+            {% else %}
+            <span><a href="/login">Sign in</a></span>
+        {% endif %}
+    </div>
+</div>

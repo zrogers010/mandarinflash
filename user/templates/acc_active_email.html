@@ -1,0 +1,5 @@
+{% autoescape off %}  
+Welcome, {{ user.username }}!  
+Please click the link to confirm your registration and activate your new account.  
+http://{{ domain }}/activate/{{ uid }}/{{ token }}/
+{% endautoescape %}  

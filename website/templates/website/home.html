@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block 'content' %}
+
+    <!-- Required libraries -->
+    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/esm/popper.min.css"> {% endcomment %}
+    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"> {% endcomment %}
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/esm/popper.min.js"></script> {% endcomment %}
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script> {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    {% comment %} <!-- Select2 library -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@select2/select2@4.1.0-rc.0/dist/css/select2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@select2/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> {% endcomment %}
+
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="search-input" placeholder="Search" autocomplete="off">
+        <div class="dropdown-menu" id="search-results" aria-labelledby="search-input">
+        </div>
+        <button class="btn btn-outline-secondary" type="button" id="search-button">Search<i class="bi bi-search"></i></button>
+    </div>
+    <div id="search-results-container"></div>
+
+    <script>
+        $(document).ready(function() {
+            $("#search-input").keyup(function() {
+              var query = $(this).val();
+          
+              $.ajax({
+                url: "/search/",
+                data: {
+                  'q': query
+                },
+                success: function(data) {
+                  $("#search-results-container").html(data.html);
+                }
+              });
+            });
+          
+            $("#search-button").click(function() {
+              var query = $("#search-input").val();
+          
+              window.location.href = "/search/?q=" + query;
+            });
+        });
+    </script>          
+
+
+
+
+    {% comment %} <div class="input-group">
+        <input id="autocomplete-input" type="text" class="form-control" placeholder="Search...">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#autocomplete-input').autocomplete({
+                source: "{% url 'autocomplete-url' %}",
+                minLength: 2,
+                select: function(event, ui) {
+                    $('#autocomplete-input').val(ui.item.label);
+                }
+            });
+        });
+    </script> {% endcomment %}
+{% endblock %}

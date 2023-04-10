@@ -1,0 +1,53 @@
+a.coming-soon {
+    /* Make the disabled links grayish*/
+    color: #6c757d;  /* gray; */
+    /* And disable the pointer events */
+    pointer-events: none;
+}
+
+.nav-item {
+    width: 100%;
+    border-bottom-width: 1px; 
+    border-bottom-color: #FFD454; 
+    border-bottom-style: solid;
+}
+.nav-item:hover {
+    width: 100%;
+    border-bottom-width: 1px; 
+    border-bottom-color: #F5F5F5; 
+    border-bottom-style: solid;
+    color: black;
+}
+
+.nav-item-disabled {
+    width: 100%;
+    border-bottom-width: 1px; 
+    border-bottom-color: #FFD454; 
+    border-bottom-style: solid;
+}
+
+body {
+    background-color: #F5F5F5 !important;
+}
+
+
+.navbar-brand {
+    display: block;
+    width: 220px !important;  
+}
+
+.sidenav {
+    width: 300px !important;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.main {
+    margin-left: 300px;
+}
+
+.user-menu {
+    position: absolute;
+    bottom: 0px;
+}
