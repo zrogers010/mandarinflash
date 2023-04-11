@@ -25,19 +25,22 @@ def register_request(request):
 			user.save()
             # to get the domain of the current site 
 			current_site = get_current_site(request)
-			mail_subject = 'Activation link has been sent to your email id'
+			mail_subject = 'Mandarin Flash registration activation link'
 			message = render_to_string('acc_active_email.html', {  
                 'user': user,  
                 'domain': current_site.domain,  
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
                 'token':account_activation_token.make_token(user),  
-            })  
+            })
+			print("message: ", message)
+			print("message type: ", type(message))
 			to_email = form.cleaned_data.get('email')
-			email = EmailMessage(  
-                        mail_subject, message, to=[to_email]  
-            )
+			print("to email: ", to_email)
+			print("to email type: ", type(to_email))
+			email = EmailMessage(mail_subject, message, to=[to_email])
+			print("Email :", email)
 			email.send()
-			return HttpResponse(f'We just sent an email to { to_email }. Click the activation link to confirm your signup.')
+			return HttpResponse(f'We just sent an email to { to_email }. Click the activation link in the email to confirm your signup.')
 	else:
 		form = NewUserForm()
 	return render(request=request, template_name="register.html", context={"register_form":form})
@@ -81,8 +84,4 @@ def activate(request, uidb64, token):
 		
 		return redirect("login")
 	else:
-		return HttpResponse('Activation link is invalid!')  
-	
-
-# reset pw
-# def reset_password()
+		return HttpResponse('Activation link is invalid!')

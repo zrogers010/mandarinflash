@@ -60,7 +60,7 @@ def flashcards(request, level):
 
 
 def wordslist(request, level):
-    words = Vocab.objects.filter(hsk_level=level).values()
+    words = Vocab.objects.filter(hsk_level=level).order_by('id').values()
     context = {
         'words': words,
         'level': level
