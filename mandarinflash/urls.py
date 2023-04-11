@@ -16,6 +16,7 @@ urlpatterns = [
     path('login/', user_view.login_request, name ='login'),
     path('logout/', user_view.logout_request, name= 'logout'),
     path('register/', user_view.register_request, name ='register'),
+    path('dictionary/', website_view.dictionary, name='dictionary'),
     path('search/', website_view.search, name='search'),
     path('character_search', website_view.character_search, name='search'),
     path('chat/', chatbot_view.chatbot, name = 'chatbot'),

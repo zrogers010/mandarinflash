@@ -3,25 +3,49 @@
 {% block 'content' %}
 
     <!-- Required libraries -->
-    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/esm/popper.min.css"> {% endcomment %}
-    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"> {% endcomment %}
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/esm/popper.min.js"></script> {% endcomment %}
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js"></script> {% endcomment %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
-    {% comment %} <!-- Select2 library -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@select2/select2@4.1.0-rc.0/dist/css/select2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@select2/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> {% endcomment %}
+    <main>
+        <section id="hero" class="container mt-4">
+            <h2>Welcome to Mandarin Flash!</h2>
+            <p>Master Chinese HSK vocabulary through interactive flashcards, quizzes, and our comprehensive dictionary. Coming soon: Live chat with a Chinese tutor!</p>
+        </section>
+        <section id="flashcards" class="container mt-4">
+            <h4>Interactive Flashcard Quizzes</h4>
+            <p>Our flashcards cover all levels of the HSK vocabulary list. Learn at your own pace and track your progress easily. Customize your learning experience with various options and settings.</p>
+            <p>Test your knowledge with our engaging quizzes. Choose from multiple-choice questions, fill-in-the-blank exercises, and more. A great way to reinforce your learning and track your improvement over time.</p>
+            <a href="/quiz/3" class="btn btn-secondary">Get Started with Flashcards</a>
+        </section>
+        
+        <section id="dictionary" class="container mt-4">
+            <h4>Comprehensive Dictionary</h4>
+            <p>Our Mandarin dictionary is designed specifically for HSK learners. Easily search and explore the vocabulary list, with example sentences, pinyin, and audio pronunciation.</p>
+            <a href="/dictionary" class="btn btn-secondary">Explore the Dictionary</a>
+        </section>
+        
+        <section id="chatbot" class="container mt-4">
+            <h4>Chatbot - Coming Soon!</h4>
+            <p>Soon, you'll be able to practice your Chinese in real-time with our AI-powered chatbot. Get instant feedback and personalized guidance from a virtual Chinese tutor.</p>
+        </section>
 
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" id="search-input" placeholder="Search" autocomplete="off">
-        <div class="dropdown-menu" id="search-results" aria-labelledby="search-input">
-        </div>
-        <button class="btn btn-outline-secondary" type="button" id="search-button">Search<i class="bi bi-search"></i></button>
-    </div>
-    <div id="search-results-container"></div>
+        <section id="chatbot" class="container mt-4">
+            <h4>Why Choose MandarinFlash?</h4>
+            <ul>
+                <li>User-Friendly Interface: Our platform is designed to be intuitive and easy-to-use, ensuring a seamless learning experience.</li>
+                <li>Adaptive Learning: MandarinFlash adjusts to your unique learning style, making it the perfect study companion.</li>
+                <li>Progress Tracking: Keep track of your achievements and watch your Chinese skills soar with our progress tracking tools.</li>
+                <li>Community Support: Join our active community of learners and share your experiences, challenges, and successes.</li>
+                <li>Get Started Today!</li>
+            </ul>
+        </section>
+
+        <section id="chatbot" class="container mt-4">
+            <p>Embark on your journey to mastering Mandarin Chinese with MandarinFlash. <a href="/register">Sign up</a> for a free account and unlock a world of interactive learning tools. Happy learning, and 加油 (jiāyóu) – Let's do this!</p>
+        </section>
+    </main>
+    
+    {% comment %} <div id="search-results-container"></div>
 
     <script>
         $(document).ready(function() {
@@ -45,29 +69,6 @@
               window.location.href = "/search/?q=" + query;
             });
         });
-    </script>          
+    </script>           {% endcomment %}
 
-
-
-
-    {% comment %} <div class="input-group">
-        <input id="autocomplete-input" type="text" class="form-control" placeholder="Search...">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">
-                <i class="fa fa-search"></i>
-            </button>
-        </div>
-    </div>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#autocomplete-input').autocomplete({
-                source: "{% url 'autocomplete-url' %}",
-                minLength: 2,
-                select: function(event, ui) {
-                    $('#autocomplete-input').val(ui.item.label);
-                }
-            });
-        });
-    </script> {% endcomment %}
 {% endblock %}

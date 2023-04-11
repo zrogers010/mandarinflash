@@ -13,7 +13,7 @@ def home(request):
 @require_GET
 def search(request):
     query = request.GET.get('q', '')
-    results = Word.objects.filter(Q(pinyin3__icontains=query) | Q(english__icontains=query)).values()#[:10]
+    results = Vocab.objects.filter(Q(pinyin3__icontains=query) | Q(english1__icontains=query)).values()#[:10]
     html = render(request, 'website/search_results.html', {'results': results}).content.decode('utf-8')
 
     return JsonResponse({'html': html})
@@ -33,8 +33,8 @@ def character_search(request):
     return render(request, 'website/character_search.html')
 
 
-def dictionary(request, char):
-    word = Word.objects.all().values()
+def dictionary(request):
+    return render(request, 'website/dictionary.html', {})
 
 
 def flashcards(request, level):
