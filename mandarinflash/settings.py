@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'six',
     'user',
     'website',
+    'chatbot',
 ]
 
 MIDDLEWARE = [

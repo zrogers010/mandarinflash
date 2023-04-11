@@ -8,40 +8,53 @@
     <div class="card">
         <h1 class="card-header"><code>{{ character|safe }}</code></h1>
         <div class="card-body">
-        <div>
-            <h5 style="display: inline">{{ word.pinyin1 }}</h5>
-            <p style="display: inline"> - </p>
-            <p style="display: inline">{{ word.partofspeech }}</p>
+            <main>
+                <section id="hero" class="container mt-4">
+                    <h4 style="display: inline">{{ word.pinyin1 }}</h4>
+                    <p style="display: inline"> - </p>
+                    <p style="display: inline">{{ word.partofspeech }}</p>
+                </section>
+                <hr>
+                <section id="hero" class="container mt-4">
+                    <h5>Definitions:</h5>
+                    <p>(1) {{ word.english1 }}</p>
+                    {% if word.english2 %}
+                        <p>(2) {{ word.english2 }}</p>
+                    {% endif %}
+                    {% if word.english3 %}
+                        <p>(3) {{ word.english3 }}</p>
+                    {% endif %}    
+                </section>
+                <hr>
+                <section id="hero" class="container mt-4">
+                    <h5>Example sentences:</h5>
+                    <table class="table table-sm table-striped">
+                        <tr>
+                            <td>1.</td>
+                            <td>{{ word.s1_char }}</td>
+                            <td>{{ word.s1_pinyin}}</td>
+                            <td>{{ word.s1_english}}</td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>{{ word.s2_char }}</td>
+                            <td>{{ word.s2_pinyin}}</td>
+                            <td>{{ word.s2_english}}</td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>{{ word.s3_char }}</td>
+                            <td>{{ word.s3_pinyin}}</td>
+                            <td>{{ word.s3_english}}</td>
+                        </tr>
+                    </table>
+                </section>
+                <hr>
+                <section id="hero" class="container mt-4">
+                    <h5>HSK Level: </h5>
+                    <p>{{ word.hsk_level }}</p>
+                </section>
+            </main>
         </div>
-        <hr>
-        <strong><p>Definitions:</p></strong>
-            <p>(1) {{ word.english1 }}</p>
-            {% if word.english2 %}
-                <p>(2) {{ word.english2 }}</p>
-            {% endif %}
-            {% if word.english3 %}
-                <p>(3) {{ word.english3 }}</p>
-            {% endif %}
-        <strong><p>Example sentances:</p></strong>
-        <table class="table table-sm table-striped">
-          <tr>
-                <td>1.</td>
-                <td>{{ word.s1_char }}</td>
-                <td>{{ word.s1_pinyin}}</td>
-                <td>{{ word.s1_english}}</td>
-          </tr>
-          <tr>
-                <td>2.</td>
-                <td>{{ word.s2_char }}</td>
-                <td>{{ word.s2_pinyin}}</td>
-                <td>{{ word.s2_english}}</td>
-          </tr>
-          <tr>
-                <td>3.</td>
-                <td>{{ word.s3_char }}</td>
-                <td>{{ word.s3_pinyin}}</td>
-                <td>{{ word.s3_english}}</td>
-          </tr>
-          </table>
-      </div>
+    </div>
 {% endblock %}

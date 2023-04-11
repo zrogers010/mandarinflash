@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
+import api
 from api import views as api_view
 from chatbot import views as chatbot_view
 from user import views as user_view
@@ -11,7 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
     path('api/', include('api.urls')),
-    # path('activate/{{ regex_pattern }}/',  user_view.activate, name='activate'),  
+    #path('activate/<str:uidb64>/<str:token>/', user_view.activate, name='activate'),
     re_path(r'^activate/{}/$'.format(regex_pattern), user_view.activate, name='activate'),  
     path('login/', user_view.login_request, name ='login'),
     path('logout/', user_view.logout_request, name= 'logout'),

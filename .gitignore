@@ -4,11 +4,10 @@ src/config
 
 # Apps in progress / data folders
 data/
-chatbot/
-api/
 scripts/
 *.csv
 *.txt
+Chinese-GPT/
 
 # Migrations
 */migrations/*

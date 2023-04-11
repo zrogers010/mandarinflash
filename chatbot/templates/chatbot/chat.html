@@ -1,0 +1,175 @@
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flashcards.css" %}" />
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+{% endblock %}
+
+{% block 'content' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const $chatContent = $("#chat-content");
+            const $userInput = $("#user-input");
+            const $chatForm = $("#chat-form");
+
+            function addMessage(content, sender) {
+                const listItem = `<li><strong>${sender}:</strong> ${content}</li>`;
+                $chatContent.append(listItem);
+                $chatContent.scrollTop($chatContent[0].scrollHeight);
+            }
+
+            async function getBotResponse(input) {
+                try {
+                    const response = await $.ajax({
+                        url: "/api/chat",
+                        type: "POST",
+                        data: JSON.stringify({ input }),
+                        contentType: "application/json",
+                        dataType: "json",
+                    });
+            
+                    return response.response;
+                } catch (error) {
+                    console.error(error);
+                    return "Error: Unable to process the input.";
+                }
+            }
+
+            $chatForm.on("submit", async function(event) {
+                event.preventDefault();
+
+                const userText = $userInput.val();
+                $userInput.val("");
+                addMessage(userText, "You");
+
+                const botResponse = await getBotResponse(userText);
+                addMessage(botResponse, "Chatbot");
+            });
+        });
+    </script>
+
+    <div class="container">
+        <div>
+            <h1 class="text-center">Tutor Bot</h1>
+        </div>
+        <h2>chat!</h2>
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div id="chatbox" class="chatbox" style="height: 400px; overflow-y: scroll; border: 1px solid #ccc;">
+                        <ul id="chat-content" class="list-unstyled"></ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input id="user-input" type="text" class="form-control" placeholder="Type your message in Chinese...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+{% comment %}
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flashcards.css" %}" />
+{% endblock %}
+
+{% block head %}
+    {{ block.super }}
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+{% endblock %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const $chatContent = $("#chat-content");
+            const $userInput = $("#user-input");
+            const $chatForm = $("#chat-form");
+
+            function addMessage(content, sender) {
+                const listItem = `<li><strong>${sender}:</strong> ${content}</li>`;
+                $chatContent.append(listItem);
+                $chatContent.scrollTop($chatContent[0].scrollHeight);
+            }
+
+            async function getBotResponse(input) {
+                // Replace this with a call to your Django view that processes the input and returns the bot's response
+                // Example: const response = await $.post("/api/chatbot", { input: input });
+
+                // This is a placeholder response for demonstration purposes
+                const response = "你好！";
+                return response;
+            }
+
+            $chatForm.on("submit", async function(event) {
+                event.preventDefault();
+
+                const userText = $userInput.val();
+                $userInput.val("");
+                addMessage(userText, "You");
+
+                const botResponse = await getBotResponse(userText);
+                addMessage(botResponse, "Chatbot");
+            });
+        });
+    </script>
+    
+    <div class="container">
+        <div>
+            <h1 class="text-center">Chinese Language Chatbot and Tutor</h1>
+        </div>
+        <h2>chat!</h2>
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <div id="chatbox" class="chatbox" style="height: 400px; overflow-y: scroll; border: 1px solid #ccc;">
+                        <ul id="chat-content" class="list-unstyled"></ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input id="user-input" type="text" class="form-control" placeholder="Type your message in Chinese...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% endcomment %}
+
+
