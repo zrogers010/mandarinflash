@@ -3,6 +3,6 @@ from django.conf import settings
 from . import views
 from django.conf.urls.static import static
  
-# urlpatterns = [
-#         # path("register", views.register_request, name="register"),
-# ]
+urlpatterns = [
+        path("save_quiz_scores/", views.save_quiz_scores, name="save_quiz_scores"),
+]

@@ -21,4 +21,5 @@ urlpatterns = [
     path('search/', website_view.search, name='search'),
     path('character_search', website_view.character_search, name='search'),
     path('chat/', chatbot_view.chatbot, name = 'chatbot'),
+    path('save_quiz_scores/', user_view.save_quiz_scores, name='save_quiz_scores'),
 ]

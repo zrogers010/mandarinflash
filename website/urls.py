@@ -19,4 +19,5 @@ urlpatterns = [
     # path('hsk6/words', views.hsk6_words, name="hsk6_words"),
     path('quiz/<int:level>', views.flashcards, name="flashcards"),
     path('words/<int:level>', views.wordslist, name="wordslist"),
+    path('flashcards/<int:level>/new_words/', views.new_flashcard_words, name='new_flashcard_words'),
 ]

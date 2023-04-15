@@ -22,21 +22,106 @@
             var correctGuesses = 0;
             var totalGuesses = 0;
             var guessMade = false;
+            var quizMode = false;
+            var finalCardGuessed = false;
+            var quizScores = [];
         
+            $(".answer-buttons").hide();
+        
+            $("#start-quiz-btn").click(function() {
+                $("#wordCarousel").carousel(0);
+                $(".answer-buttons").show();
+                $(this).hide();
+        
+                correctGuesses = 0;
+                totalGuesses = 0;
+                guessMade = false;
+                quizMode = true;
+                finalCardGuessed = false;
+                quizScores = [];
+                updateScoreDisplay();
+        
+                alert("Quiz started! Guess 5 words");
+            });
+
+            $("#wordCarousel").on("slid.bs.carousel", function() {
+                // Check if the last slide is active and the quiz has started
+                if ($("#wordCarousel").find(".carousel-item:last").hasClass("active") && quizMode) {
+                    if (finalCardGuessed) {
+                        completeQuiz();
+                    }
+                } else {
+                    finalCardGuessed = false;
+                }
+            });
+           
             function updateScoreDisplay() {
                 $("#score-display").text("Score: " + correctGuesses + "/" + totalGuesses);
             }
+
+            function completeQuiz() {
+                updateScoreDisplay();
+
+                // Create an unordered list of the wrong answers
+                var wrongAnswersList = $('<ul>');
+                for (var i = 0; i < quizScores.length; i++) {
+                    if (!quizScores[i][2]) { // If the answer was incorrect (correct is false)
+                        var listItem = $('<li>').text(quizScores[i][0] + " - " + quizScores[i][6]);
+                        wrongAnswersList.append(listItem);
+                    }
+                }
+            
+                // Delay the alert by 100 milliseconds to allow the browser to render the updated score
+                setTimeout(function() {
+                    // Show a popup alert with the score and the list of wrong answers
+                    alert("Quiz complete! Your score is " + correctGuesses + "/" + totalGuesses + "\n\nWrong answers:\n" + wrongAnswersList.text());
+                }, 100);
+            
+                // Save the quiz score to the table
+                {% if user.is_authenticated %}
+                    saveQuizScores();
+                {% endif %}
+            }
+
+
+            // Save quiz scores
+            {% if user.is_authenticated %}
+                function saveQuizScores() {
+                    var words = [];
+                    {% for word in words %}
+                        words.push('{{ word.unicode|safe }}');
+                    {% endfor %}
+            
+                    $.post('{% url "save_quiz_scores" %}', {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        quiz_name: 'Level {{ level }} Flashcard Quiz',
+                        score: correctGuesses,
+                        total_questions: words.length,
+                        words: JSON.stringify(words),
+                    })
+                    .done(function(response) {
+                        if (response.status === 'success') {
+                            console.log('Quiz scores saved successfully');
+                        } else {
+                            console.log('Failed to save quiz scores', response.error);
+                        }
+                    })
+                    .fail(function() {
+                        console.log('Error occurred while saving quiz scores');
+                    });
+                }
+            {% endif %}
         
             $(".answer-btn").click(function() {
-                
                 var itemId = $(this).data("item-id");
-                // var itemAnswer = $("#word-answer-" + itemId).val();
                 var itemAnswer = $(this).closest('.carousel-item').find('.card-title').text();
                 console.log("ItemAnswer: ", itemAnswer);
                 var guess = $(this).val();
                 console.log("Guess: ", guess)
                 var label = $(this).closest('li').find('label');
-                
+                var englishDefinition = $(this).closest('.carousel-item').find('.card-text').text();
+                console.log("English def: ", englishDefinition)
+            
                 if (guessMade) {
                     if (guess == itemAnswer) {
                         label.removeClass("btn-outline-danger").addClass("btn-outline-success");
@@ -47,17 +132,40 @@
                     }
                 }
                 guessMade = true;
-
+            
+                var correct = false;
                 if (guess == itemAnswer) {
-                    console.log("TRUE!!!!!")
                     label.removeClass("btn-outline-danger").addClass("btn-outline-success");
                     correctGuesses++;
                     totalGuesses++;
+                    correct = true;
                 } else {
                     label.removeClass("btn-outline-danger").addClass("btn-outline-danger");
                     totalGuesses++;
+                    correct = false;
                 }
+            
                 updateScoreDisplay();
+
+                console.log("currentIndex:", currentIndex);
+                console.log("totalItems:", totalItems);
+                console.log("quizMode:", quizMode);
+            
+                if(quizMode) {
+                    wrongGuesses = totalGuesses - correctGuesses;
+                    currentScore = correctGuesses/totalGuesses;
+            
+                    quizScores.push([itemAnswer, guess, correct, correctGuesses, wrongGuesses, currentScore, englishDefinition]);
+                    console.log("quizescores : ", quizScores)
+                }
+            
+                // Check if it's the last slide and the quiz is in progress
+                var currentIndex = $("#wordCarousel .carousel-inner .carousel-item").index($("#wordCarousel .carousel-inner .carousel-item.active"));
+                var totalItems = $("#wordCarousel .carousel-inner .carousel-item").length;
+
+                if (currentIndex === totalItems - 1 && quizMode) {
+                    completeQuiz();
+                }
             });
 
             $("#wordCarousel").on("slid.bs.carousel", function() {
@@ -100,6 +208,14 @@
             </div>
         </div> 
         {% endcomment %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button id="start-quiz-btn" class="btn btn-primary">Start Quiz</button>
+                </div>
+            </div>
+        </div>
 
         <div id="wordCarousel" class="carousel carousel-dark slide border" data-bs-ride="carousel">
             <div class="carousel-inner">
@@ -150,7 +266,7 @@
                             </div>
                         </div>
 
-                        <div class=" {% if forloop.first %}active{% endif %}" id="answer-buttons">
+                        <div class="answer-buttons {% if forloop.first %}active{% endif %}" id="answer-buttons">
 
                             <strong><p>Pick the character's matching definition</p></strong>
 

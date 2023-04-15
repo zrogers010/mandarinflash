@@ -1,17 +1,20 @@
-from django.http import HttpResponse
-from django.shortcuts import  render, redirect
-from django.contrib.auth import login, authenticate
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
 from .forms import NewUserForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_str 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
 from django.template.loader import render_to_string  
-from .tokens import account_activation_token  
-from django.contrib.auth import login, authenticate, logout
+from .tokens import account_activation_token
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm #add this
 from django.contrib.auth.models import User  
-from django.core.mail import EmailMessage  
+from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ValidationError
+from .models import QuizScore
 
 
 def register_request(request):
@@ -85,3 +88,36 @@ def activate(request, uidb64, token):
 		return redirect("login")
 	else:
 		return HttpResponse('Activation link is invalid!')
+
+
+
+@login_required
+@csrf_exempt
+def save_quiz_scores(request):
+	if request.method == 'POST':
+		try:
+			user = request.user
+			quiz_name = request.POST['quiz_name']
+			score = int(request.POST['score'])
+			total_questions = int(request.POST['total_questions'])
+			words = str(request.POST['words'])
+
+			new_quiz_score = QuizScore(
+				user=user,
+				quiz_name=quiz_name,
+				score=score,
+				total_questions=total_questions,
+				words=words,
+			)
+			new_quiz_score.save()
+
+		except ValidationError as e:
+			return JsonResponse({'status': 'failed', 'error': str(e)})
+
+		except Exception as e:
+			return JsonResponse({'status': 'failed', 'error': 'An unexpected error occurred: ' + str(e)})
+		
+		return JsonResponse({'status': 'success'})
+	
+	return JsonResponse({'status': 'failed', 'error': 'Invalid request method'})
+

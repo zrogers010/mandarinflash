@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+import uuid
 
 
 class HSKVocab(models.Model):
@@ -60,8 +62,4 @@ class Word(models.Model):
 
     def __str__(self):
         return self.simplified
-
-
-
-
 
