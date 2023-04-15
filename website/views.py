@@ -59,26 +59,6 @@ def flashcards(request, level):
     return render(request, 'website/hsk_flashcards.html', context)
 
 
-
-# Shuffles flashcards for new quiz
-def new_flashcard_words(request, level):
-    words = list(Vocab.objects.filter(hsk_level=level).values())
-    words = sorted(words, key=lambda k: random.random())
-
-    for word in words[:5]:
-        ans = generate_answers(level, word)
-        ans = random.sample(ans, k=len(ans))
-        word["answer1"] = ans[0]
-        word["answer2"] = ans[1]
-        word["answer3"] = ans[2]
-        word["answer4"] = ans[3]
-
-    response_data = {
-        'words': words[:5],
-    }
-
-    return JsonResponse(response_data)
-
 def wordslist(request, level):
     words = Vocab.objects.filter(hsk_level=level).order_by('id').values()
     context = {
