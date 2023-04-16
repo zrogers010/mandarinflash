@@ -45,7 +45,7 @@
                 quizScores = [];
                 updateScoreDisplay();
         
-                alert("Quiz started! Guess 5 words");
+                $("#startQuizModal").modal('show');
             });
 
             $("#wordCarousel").on("slid.bs.carousel", function() {
@@ -67,6 +67,7 @@
                 updateScoreDisplay();
 
                 // Create an unordered list of the wrong answers
+                /*
                 var wrongAnswersList = $('<ul>');
                 for (var i = 0; i < quizScores.length; i++) {
                     if (!quizScores[i][2]) { // If the answer was incorrect (correct is false)
@@ -74,11 +75,19 @@
                         wrongAnswersList.append(listItem);
                     }
                 }
+                */
             
                 // Delay the alert by 100 milliseconds to allow the browser to render the updated score
                 setTimeout(function() {
-                    // Show a popup alert with the score and the list of wrong answers
-                    alert("Quiz complete! Your score is " + correctGuesses + "/" + totalGuesses + "\n\nWrong answers:\n" + wrongAnswersList.text());
+                    $("#finalScore").text(correctGuesses + "/" + totalGuesses);
+                    // Fill in the wrong words list
+                    $("#wrongWordsList").empty();
+                    for (var i = 0; i < quizScores.length; i++) {
+                        if (!quizScores[i][2]) {
+                            $("#wrongWordsList").append('<li>' + quizScores[i][0] + ' - ' + quizScores[i][6] + '</li>');
+                        }
+                    }
+                    $("#completeQuizModal").modal('show');    
                 }, 100);
             
                 // Save the quiz score to the table
@@ -303,6 +312,43 @@
         </div>
         <strong><div id="score-display">Score:  {{ correctGuesses }}/{{ totalGuesses }}</div></strong>
 
+    </div>
+
+    <!-- Start Quiz Modal -->
+    <div class="modal fade" id="startQuizModal" tabindex="-1" role="dialog" aria-labelledby="startQuizModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="startQuizModalLabel">Start Quiz</h5>
+                </div>
+                <div class="modal-body">
+                    Quiz started! Guess 5 words.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Quiz Modal -->
+    <div class="modal fade" id="completeQuizModal" tabindex="-1" role="dialog" aria-labelledby="completeQuizModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completeQuizModalLabel">Quiz Complete</h5>
+                </div>
+                <div class="modal-body">
+                    Your score is: <span id="finalScore"></span>
+                    <br>
+                    Here are the words you got wrong:
+                    <ul id="wrongWordsList"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 
