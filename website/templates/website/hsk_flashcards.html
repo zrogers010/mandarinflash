@@ -26,7 +26,11 @@
             var finalCardGuessed = false;
             var quizScores = [];
         
+            // Hide answers section when quiz not in progress.
             $(".answer-buttons").hide();
+
+            // Disable auto rotate carousel.
+            $("#wordCarousel").carousel({ interval: false });
         
             $("#start-quiz-btn").click(function() {
                 $("#wordCarousel").carousel(0);
@@ -115,12 +119,9 @@
             $(".answer-btn").click(function() {
                 var itemId = $(this).data("item-id");
                 var itemAnswer = $(this).closest('.carousel-item').find('.card-title').text();
-                console.log("ItemAnswer: ", itemAnswer);
                 var guess = $(this).val();
-                console.log("Guess: ", guess)
                 var label = $(this).closest('li').find('label');
                 var englishDefinition = $(this).closest('.carousel-item').find('.card-text').text();
-                console.log("English def: ", englishDefinition)
             
                 if (guessMade) {
                     if (guess == itemAnswer) {
@@ -146,17 +147,11 @@
                 }
             
                 updateScoreDisplay();
-
-                console.log("currentIndex:", currentIndex);
-                console.log("totalItems:", totalItems);
-                console.log("quizMode:", quizMode);
             
                 if(quizMode) {
                     wrongGuesses = totalGuesses - correctGuesses;
                     currentScore = correctGuesses/totalGuesses;
-            
                     quizScores.push([itemAnswer, guess, correct, correctGuesses, wrongGuesses, currentScore, englishDefinition]);
-                    console.log("quizescores : ", quizScores)
                 }
             
                 // Check if it's the last slide and the quiz is in progress
@@ -166,6 +161,8 @@
                 if (currentIndex === totalItems - 1 && quizMode) {
                     completeQuiz();
                 }
+
+                $("#wordCarousel").carousel('next');
             });
 
             $("#wordCarousel").on("slid.bs.carousel", function() {
@@ -229,7 +226,6 @@
                                         <span>
                                             <h1 class="card-title text-danger">{{ word.unicode|safe }}</h1>
                                         </span>
-                                        {% comment %} <button class="btn btn-outline-secondary btn-sm" type="button">&#x1F50A;</button> {% endcomment %}
                                         <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#card-text-{{ forloop.counter }}" aria-expanded="false" aria-controls="card-text-{{ forloop.counter }}">
                                             Show Pīnyīn
                                         </button>
