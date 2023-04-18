@@ -5,6 +5,7 @@ from django.views.decorators.http import require_GET
 from .models import Word, Vocab
 import random
 
+QUIZ_LENGTH = 10
 
 def home(request):
     return render(request, 'website/home.html', {})
@@ -42,7 +43,7 @@ def flashcards(request, level):
     # print("WORDS: ", words[:5])
     words = sorted(words, key=lambda k: random.random())
     
-    for word in words[:5]:
+    for word in words[:QUIZ_LENGTH]:
         ans = generate_answers(level, word)
         ans = random.sample(ans, k=len(ans))
         word["answer1"] = ans[0]
@@ -51,7 +52,7 @@ def flashcards(request, level):
         word["answer4"] = ans[3]
 
     context = {
-        'words': words[:5],
+        'words': words[:QUIZ_LENGTH],
         'english': [word["english1"], word["english2"], word["english3"]],
         'level': level
     }

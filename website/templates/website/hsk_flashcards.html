@@ -205,10 +205,12 @@
                     <h5 class="modal-title" id="startQuizModalLabel">Start Quiz</h5>
                 </div>
                 <div class="modal-body">
-                    Quiz started! Guess 5 words.
+                    <h5>Starting Quiz</h5>
+                    <p>You will be asked 10 vocabulary words from HSK level {{level}}.</p>
+                    <p>加油 (jiāyóu)!</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Ok</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Begin</button>
                 </div>
             </div>
         </div>
@@ -222,10 +224,12 @@
                     <h5 class="modal-title" id="completeQuizModalLabel">Quiz Complete</h5>
                 </div>
                 <div class="modal-body">
-                    Your score is: <span id="finalScore"></span>
+                    <h5>Your score is: <span id="finalScore"></span></h5>
                     <br>
                     Here are the words you got wrong:
                     <ul id="wrongWordsList"></ul>
+                    <br>
+                    <a style="text-decoration: none" href="/quiz_history/">View Results</a>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
