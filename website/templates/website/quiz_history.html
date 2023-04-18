@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flashcards.css" %}" />
+{% endblock %}
+
+{% block 'content' %}
+    <div class="page-header">
+        <h2>Quiz History</h2>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Quiz Name</th>
+                <th>Score</th>
+                <th>Total Questions</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz_score in quiz_scores %}
+                <tr>
+                    <td><a href="{% url 'quiz_details' quiz_id=quiz_score.id %}">{{ quiz_score.quiz_name }}</a></td>
+                    <td>{{ quiz_score.score }}</td>
+                    <td>{{ quiz_score.total_questions }}</td>
+                    <td>{{ quiz_score.timestamp|date:"F j, Y, g:i a" }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No quiz history found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

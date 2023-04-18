@@ -28,6 +28,7 @@
         
             // Hide answers section when quiz not in progress.
             $(".answer-buttons").hide();
+            $("#score-display").hide();
 
             // Disable auto rotate carousel.
             $("#wordCarousel").carousel({ interval: false });
@@ -35,6 +36,7 @@
             $("#start-quiz-btn").click(function() {
                 $("#wordCarousel").carousel(0);
                 $(".answer-buttons").show();
+                $("#score-display").show();
                 $(this).hide();
         
                 correctGuesses = 0;
@@ -65,17 +67,6 @@
 
             function completeQuiz() {
                 updateScoreDisplay();
-
-                // Create an unordered list of the wrong answers
-                /*
-                var wrongAnswersList = $('<ul>');
-                for (var i = 0; i < quizScores.length; i++) {
-                    if (!quizScores[i][2]) { // If the answer was incorrect (correct is false)
-                        var listItem = $('<li>').text(quizScores[i][0] + " - " + quizScores[i][6]);
-                        wrongAnswersList.append(listItem);
-                    }
-                }
-                */
             
                 // Delay the alert by 100 milliseconds to allow the browser to render the updated score
                 setTimeout(function() {
@@ -104,6 +95,11 @@
                     {% for word in words %}
                         words.push('{{ word.unicode|safe }}');
                     {% endfor %}
+
+                    // Create an array of the answers (1 for correct, 0 for incorrect)
+                    var answers = quizScores.map(function(score) {
+                        return score[2] ? 1 : 0;
+                    });
             
                     $.post('{% url "save_quiz_scores" %}', {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -111,6 +107,7 @@
                         score: correctGuesses,
                         total_questions: words.length,
                         words: JSON.stringify(words),
+                        answers: JSON.stringify(answers),
                     })
                     .done(function(response) {
                         if (response.status === 'success') {
@@ -192,29 +189,6 @@
             <a href="/words/{{level}}"><h5>Level {{ level }} Vocabulary Words</h5></a>
         </div>
 
-        {% comment %} 
-        <div class="container">
-            <div class="row justify-content-center mb-3">
-                <div class="col-auto">
-                    <form id="wordCountForm">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="wordCount" id="wordCount20" value="25" checked>
-                            <label class="form-check-label" for="wordCount20">25</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="wordCount" id="wordCount50" value="50">
-                            <label class="form-check-label" for="wordCount50">50</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="wordCount" id="wordCount100" value="100">
-                            <label class="form-check-label" for="wordCount100">100</label>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div> 
-        {% endcomment %}
-
         <div class="container">
             <div class="row">
                 <div class="col text-center">
@@ -223,7 +197,7 @@
             </div>
         </div>
 
-        <div id="wordCarousel" class="carousel carousel-dark slide border" data-bs-ride="carousel">
+        <div id="wordCarousel" class="carousel carousel-dark slide border" data-interval="false" data-bs-ride="carousel">
             <div class="carousel-inner">
                 {% for word in words %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
@@ -309,8 +283,9 @@
                 <span class="text-primary"><strong>Next</strong></span>
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
+            <strong><div id="score-display">Score:  {{ correctGuesses }}/{{ totalGuesses }}</div></strong>
         </div>
-        <strong><div id="score-display">Score:  {{ correctGuesses }}/{{ totalGuesses }}</div></strong>
+        
 
     </div>
 

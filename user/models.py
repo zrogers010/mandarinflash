@@ -9,6 +9,7 @@ class QuizScore(models.Model):
     score = models.IntegerField()
     total_questions = models.IntegerField()
     words = models.TextField()
+    answers = models.TextField(null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

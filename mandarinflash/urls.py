@@ -22,4 +22,6 @@ urlpatterns = [
     path('character_search', website_view.character_search, name='search'),
     path('chat/', chatbot_view.chatbot, name = 'chatbot'),
     path('save_quiz_scores/', user_view.save_quiz_scores, name='save_quiz_scores'),
+    path('quiz_history/', user_view.quiz_history, name='quiz_history'),
+    path('quiz_history/<uuid:quiz_id>/', user_view.quiz_details, name='quiz_details'),
 ]

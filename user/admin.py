@@ -10,6 +10,10 @@ class QuizScoreAdmin(admin.ModelAdmin):
         return mark_safe('<br>'.join(obj.words))
     display_words.short_description = 'Words'
 
+    def display_answers(self, obj):
+        return mark_safe('<br>'.join(obj.answers))
+    display_words.short_description = 'Answers'
+
 
 # Register your models here.
 admin.site.register(QuizScore, QuizScoreAdmin)

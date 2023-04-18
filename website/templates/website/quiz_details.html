@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static "website/style.css" %}" />
+    <link rel="stylesheet" href="{% static "website/flashcards.css" %}" />
+{% endblock %}
+
+{% block 'content' %}
+    <div class="page-header">
+        <h2>Quiz Details</h2>
+        <p> {{ score }}/{{num_questions}} <p>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Word</th>
+                <th scope="col">Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word, answer in word_answer_pairs %}
+                <tr>
+                    <td><a style="text-decoration: none" href="/character/{{ word|safe }}">{{ word|safe }}</a></td>
+                    <td>
+                        {% if answer == 1 %}
+                            Correct
+                        {% else %}
+                            Wrong
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

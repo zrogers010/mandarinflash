@@ -1,16 +1,25 @@
+import os
 import json
-import re
+import openai
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from transformers import GPT2LMHeadModel, BertTokenizer, TextGenerationPipeline
 
-# Load pre-trained model and tokenizer
-model_name = "uer/gpt2-chinese-cluecorpussmall"
-tokenizer = BertTokenizer.from_pretrained(model_name)
-model = GPT2LMHeadModel.from_pretrained(model_name)
+# Set up OpenAI API credentials
+openai.api_key = str(os.getenv('OPENAI_KEY'))
 
-# Initialize the text generation pipeline
-generation_pipeline = TextGenerationPipeline(model, tokenizer)
+# Define function to generate chatbot response using OpenAI API
+def generate_response(input_text):
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt=f"Conversation\nUser: 你好吗? I'm learning chinese, can you please help me practice some basic vocabulary words? I may say something in english, but you can response in english and chinese. Just keep the reponse short and fun, but try to help me learn. \nAI:早上好，今天我们将复习基本的汉语词汇 \nUser: {input_text}\nAI:",
+        max_tokens=60,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+    bot_response = response.choices[0].text.strip()
+
+    return bot_response
 
 @csrf_exempt
 def chatbot(request):
@@ -25,27 +34,3 @@ def chatbot(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-def generate_response(input_text):
-    response = generation_pipeline(input_text, max_length=25, num_return_sequences=3, temperature=0.8, do_sample=True, top_k=50)
-    best_response = choose_best_response(input_text, response)
-
-    trimmed_response = trim_response(best_response["generated_text"])
-    
-    return trimmed_response
-
-def trim_response(response_text):
-    # Split the response text into sentences using a regular expression
-    sentences = re.split('(?<=[。！？])', response_text)
-    
-    # Remove any empty sentences
-    sentences = [sentence.strip() for sentence in sentences if sentence.strip()]
-    
-    # Reconstruct the response text with only complete sentences
-    trimmed_text = ''.join(sentences)
-    return trimmed_text
-def choose_best_response(input_text, response_list):
-    best_response = min(response_list, key=lambda x: len(x["generated_text"]))
-    
-    return best_response
-
-    

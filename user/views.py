@@ -1,5 +1,6 @@
+import json 
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from .forms import NewUserForm
 from django.contrib.sites.shortcuts import get_current_site
@@ -90,7 +91,6 @@ def activate(request, uidb64, token):
 		return HttpResponse('Activation link is invalid!')
 
 
-
 @login_required
 @csrf_exempt
 def save_quiz_scores(request):
@@ -101,6 +101,7 @@ def save_quiz_scores(request):
 			score = int(request.POST['score'])
 			total_questions = int(request.POST['total_questions'])
 			words = str(request.POST['words'])
+			answers = str(request.POST["answers"])
 
 			new_quiz_score = QuizScore(
 				user=user,
@@ -108,6 +109,7 @@ def save_quiz_scores(request):
 				score=score,
 				total_questions=total_questions,
 				words=words,
+				answers=answers,
 			)
 			new_quiz_score.save()
 
@@ -120,4 +122,30 @@ def save_quiz_scores(request):
 		return JsonResponse({'status': 'success'})
 	
 	return JsonResponse({'status': 'failed', 'error': 'Invalid request method'})
+
+
+@login_required
+def quiz_history(request):
+    quiz_scores = QuizScore.objects.filter(user=request.user).order_by('-timestamp').values()
+    print("Quiz Scores: ", quiz_scores)
+    context = {'quiz_scores': quiz_scores}
+    return render(request, 'website/quiz_history.html', context)
+
+
+@login_required
+def quiz_details(request, quiz_id):
+    quiz = QuizScore.objects.get(id=quiz_id)
+    words = json.loads(quiz.words)
+    answers = json.loads(quiz.answers)
+
+    word_answer_pairs = zip(words, answers)
+    print(word_answer_pairs)
+
+    context = {
+        'score': quiz.score,
+		'num_questions': quiz.total_questions,
+        'word_answer_pairs': word_answer_pairs,
+    }
+    return render(request, 'website/quiz_details.html', context)
+
 
